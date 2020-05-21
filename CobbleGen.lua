@@ -2,16 +2,6 @@ local robot = require("robot")
 local component = require("component")
 local crafting = component.crafting
 
-
-while true do
-    if robot.durability() == nil then
-        craft()
-    else
-        mine()
-    end
-end
-
-
 function craft()
     --clear inventory
     for i=1,16 do
@@ -33,11 +23,26 @@ function craft()
     --craft and equip the new pick
     robot.select(1)
     crafting.craft()
-    robot.equip()
+    robot.turnRight()  --places pick in hopper, due to equip requiring special components
+    robot.drop()
+    robot.turnLeft()
 end
 
-function mine()
+function mineCobble()
     robot.swing()
-    robot.sleep(10)
+    os.sleep(3)
 end
+
+
+while true do
+    if (robot.durability() == nil) 
+    then
+        craft()
+    else
+        mineCobble()
+    end
+end
+
+
+
 
